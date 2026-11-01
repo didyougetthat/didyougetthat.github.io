@@ -1,0 +1,3406 @@
+/* site.css — layout and components for every page. It writes no hex colour: every colour, radius and shadow comes from the
+   tokens in themes.css, so one set of rules serves the light, dark and vivid looks (and the side-by-side previews). The only
+   literals are neutral see-through white / black decorations (rgba) that sit on top of a token colour.
+   Phone first (360–414 px wide); wider screens add columns from 36rem / 40rem. System fonts only. */
+
+/* ---------- 1. Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--color-bg);
+  background-image: var(--page-decor);
+  background-repeat: no-repeat;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-heading);
+  font-weight: var(--heading-weight);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(2rem, 8.5vw, 3.4rem);
+  line-height: 1.08;
+}
+
+h2 {
+  font-size: clamp(1.45rem, 5.2vw, 2rem);
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+h4 {
+  font-size: 1.05rem;
+}
+
+p {
+  margin: 0 0 1rem;
+}
+
+a {
+  color: var(--color-link);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  text-decoration-thickness: 3px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+main:focus {
+  outline: none; /* the skip link lands here; the page itself is not a control */
+}
+
+.container {
+  width: min(100% - 2rem, 60rem);
+  margin-inline: auto;
+}
+
+.site-main {
+  flex: 1 0 auto;
+  padding-bottom: 3rem;
+}
+
+/* ---------- 2. Helpers ---------- */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.icon {
+  flex: none;
+  width: 1.25em;
+  height: 1.25em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.no-js .js-only {
+  display: none !important; /* a control that needs scripting is not shown when scripting is off */
+}
+
+.skip-link {
+  position: absolute;
+  top: -5rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-weight: 800;
+}
+
+.skip-link:focus {
+  top: 0.75rem;
+}
+
+/* ---------- 3. Header, brand, theme control ---------- */
+.site-header {
+  background-color: var(--color-header-bg);
+  background-image: var(--header-bg-image);
+  color: var(--color-on-header);
+  border-bottom: var(--header-edge);
+}
+
+/* the vivid header is a violet-to-pink gradient where the page's focus colour (hot pink) would vanish: its ring uses the header text colour */
+.site-header :focus-visible {
+  outline-color: var(--color-on-header);
+}
+
+.site-header__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  padding-block: 0.5rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  color: inherit;
+  font-family: var(--font-heading);
+  font-size: clamp(1.05rem, 4.8vw, 1.3rem);
+  font-weight: var(--heading-weight);
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.brand:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+.brand__mark {
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+}
+
+.mark-bubble {
+  fill: var(--mark-bg);
+}
+
+.mark-q {
+  fill: none;
+  stroke: var(--mark-fg);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+}
+
+.mark-dot {
+  fill: var(--mark-fg);
+}
+
+.theme-switcher {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.theme-switcher__buttons {
+  display: inline-flex;
+  gap: 0.3rem;
+}
+
+.theme-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 0.7rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.theme-btn:hover {
+  background: var(--color-surface-alt);
+}
+
+.theme-btn[aria-pressed="true"] {
+  background: var(--button-primary-bg);
+  border-color: transparent;
+  color: var(--color-on-primary);
+}
+
+.theme-btn__check {
+  display: none;
+}
+
+.theme-btn[aria-pressed="true"] .theme-btn__check {
+  display: inline-block;
+}
+
+/* in the header the buttons sit on the header colour: outlined circles, the chosen one filled with the highlight colour */
+.site-header .theme-btn {
+  background: transparent;
+  border-color: currentColor;
+  color: var(--color-on-header);
+}
+
+.site-header .theme-btn:hover {
+  background: var(--header-hover);
+}
+
+.site-header .theme-btn[aria-pressed="true"] {
+  background: var(--color-accent);
+  border-color: var(--color-on-header);
+  color: var(--color-on-accent);
+}
+
+/* header version: icon only on phones (the name stays available to screen readers), icon + name from 36rem */
+.theme-switcher--compact .theme-btn__label-row {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.theme-switcher--compact .theme-btn {
+  padding: 0;
+}
+
+.theme-switcher--compact .theme-btn[aria-pressed] .theme-btn__check {
+  display: none;
+}
+
+@media (min-width: 36rem) {
+  .theme-switcher--compact .theme-btn {
+    padding: 0 1rem;
+  }
+
+  .brand__mark {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .theme-switcher--compact .theme-btn__label-row {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip-path: none;
+  }
+}
+
+.theme-switcher--large .theme-switcher__buttons {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.theme-switcher--large .theme-btn {
+  position: relative;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-height: 5rem;
+  padding: 0.6rem 0.4rem;
+  border-radius: var(--radius-md);
+  font-size: 1.05rem;
+}
+
+.theme-switcher--large .theme-btn > .icon {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+/* the chosen look wears a small tick in its corner (the colour change is not the only sign) */
+.theme-switcher--large .theme-btn__check {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.theme-switcher__label {
+  font-weight: 800;
+}
+
+/* ---------- 4. Buttons, badges, chips, cards ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.5rem 1.25rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius-button);
+  font: inherit;
+  font-weight: 800;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+}
+
+.btn--primary {
+  background: var(--button-primary-bg);
+  color: var(--color-on-primary);
+  box-shadow: var(--shadow-button);
+}
+
+.btn--primary:hover {
+  background: var(--button-primary-bg-hover);
+  transform: translateY(-1px);
+}
+
+.btn--primary:active {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+
+.btn--secondary {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.btn--secondary:hover {
+  background: var(--color-surface-alt);
+}
+
+.btn--small {
+  padding-inline: 1rem;
+  font-size: 0.95rem;
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  background: var(--color-surface-alt);
+  border-color: var(--color-divider);
+  color: var(--color-text-muted);
+  box-shadow: none;
+  transform: none;
+  cursor: not-allowed;
+}
+
+/* what the keyboard focus ring looks like, shown without pressing Tab (preview page) */
+.is-focus-demo {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.badge {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.75rem;
+  white-space: nowrap;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-size: 0.875rem;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 44px;
+  padding: 0.35rem 1rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 700;
+  line-height: 1.25;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.12s ease, transform 0.12s ease;
+}
+
+.chip:hover {
+  background: var(--color-surface-alt);
+  transform: translateY(-1px);
+}
+
+.chip[aria-current] {
+  background: var(--button-primary-bg);
+  border-color: transparent;
+  color: var(--color-on-primary);
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  padding: 1.1rem;
+  border: var(--card-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+/* ---------- 5. Footer ---------- */
+.site-footer {
+  padding: 1.25rem 0 1.75rem;
+  border-top: 1px solid var(--color-divider);
+  color: var(--color-text-muted);
+  font-size: 0.925rem;
+}
+
+.site-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+.site-footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 700;
+}
+
+.site-footer strong {
+  color: var(--color-text);
+}
+
+/* ---------- 6. Home page ---------- */
+.hero {
+  position: relative;
+  display: grid;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 1.25rem;
+  padding: 1.75rem 1.25rem 1.25rem;
+  overflow: hidden;
+  border: var(--card-border);
+  border-radius: var(--radius-lg);
+  background-image: radial-gradient(circle at 96% 4%, rgba(255, 255, 255, 0.14) 0 4.5rem, transparent 4.6rem),
+    radial-gradient(circle at 2% 102%, rgba(255, 255, 255, 0.1) 0 6rem, transparent 6.1rem), var(--hero-bg);
+  box-shadow: var(--shadow-card);
+  color: var(--color-on-hero);
+}
+
+.hero__title {
+  margin-bottom: 0.6rem;
+}
+
+.hero__tagline {
+  max-width: 28rem;
+  margin: 0;
+  font-size: clamp(1.1rem, 4.2vw, 1.35rem);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.hero__art {
+  justify-self: center;
+  width: min(15rem, 72%);
+  height: auto;
+}
+
+.art-bubble-main {
+  fill: var(--color-on-hero);
+}
+
+.art-mark {
+  fill: var(--color-hero-from);
+  font-family: var(--font-heading);
+  font-size: 58px;
+  font-weight: 900;
+}
+
+.art-bubble-alt {
+  fill: var(--color-accent);
+  stroke: var(--color-hero-from);
+  stroke-width: 4;
+  stroke-linejoin: round;
+}
+
+.art-check {
+  fill: none;
+  stroke: var(--color-on-accent);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.art-spark {
+  fill: var(--color-accent);
+}
+
+.art-dot {
+  fill: var(--color-on-hero);
+  opacity: 0.75;
+}
+
+@media (min-width: 40rem) {
+  .hero {
+    grid-template-columns: 1.3fr 1fr;
+    padding: 2.5rem 2.25rem;
+  }
+
+  .hero__art {
+    width: min(17rem, 100%);
+  }
+}
+
+.section {
+  margin-top: 2.25rem;
+}
+
+.section__note {
+  margin: 1rem 0 0;
+  color: var(--color-text-muted);
+}
+
+.grade-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.grade-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  min-height: 9.5rem;
+  padding: 1.1rem 1rem;
+  overflow: hidden;
+  border: var(--card-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.grade-card::after {
+  content: attr(data-grade);
+  content: attr(data-grade) / "";
+  position: absolute;
+  right: 0.6rem;
+  bottom: -1.1rem;
+  color: var(--color-surface-alt);
+  font-family: var(--font-heading);
+  font-size: 7rem;
+  font-weight: 900;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.grade-card__title {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: clamp(1.4rem, 6vw, 1.9rem);
+}
+
+.grade-card .badge {
+  position: relative;
+  z-index: 1;
+}
+
+.promise {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin: 2rem 0 0;
+  padding: 1rem 1.15rem;
+  border: var(--card-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  font-weight: 700;
+}
+
+.promise .icon {
+  width: 2.1rem;
+  height: 2.1rem;
+  color: var(--color-correct);
+}
+
+.promise p {
+  margin: 0;
+}
+
+/* ---------- 7. Theme preview page ---------- */
+.page-head {
+  padding-top: 1.5rem;
+}
+
+.page-head h1 {
+  font-size: clamp(1.9rem, 7.5vw, 2.8rem);
+}
+
+.preview-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin: 0 0 0.5rem;
+  padding: 0.85rem 1rem;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.preview-note p {
+  margin: 0;
+}
+
+.sample {
+  margin-top: 2.25rem;
+}
+
+.sample > h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.9rem;
+}
+
+.sample > h3::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: var(--color-divider);
+}
+
+.sample__hint {
+  margin: 0.75rem 0 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.sample > h3 + .sample__hint {
+  margin-top: -0.4rem;
+}
+
+.stack {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* on wide screens the sample cards keep the width of a phone-sized reading column instead of stretching across the page */
+.sample > .card,
+.sample > .stack,
+.theme-switcher--large {
+  max-width: 40rem;
+}
+
+/* the three mini screens, each drawn in its own theme */
+.mini-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mini {
+  overflow: hidden;
+  border: var(--card-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: clamp(0.62rem, 2.8vw, 0.95rem);
+  box-shadow: var(--shadow-card);
+}
+
+.mini__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55em 0.6em;
+  background-color: var(--color-header-bg);
+  background-image: var(--header-bg-image);
+  color: var(--color-on-header);
+  border-bottom: var(--header-edge);
+}
+
+.mini__logo {
+  width: 1.3em;
+  height: 1.3em;
+  border-radius: 50%;
+  background: var(--mark-bg);
+}
+
+.mini__dots {
+  display: inline-flex;
+  gap: 0.25em;
+}
+
+.mini__dots i {
+  display: block;
+  width: 0.75em;
+  height: 0.75em;
+  border: 0.14em solid currentColor;
+  border-radius: 50%;
+}
+
+.mini__dots i:nth-child(2) {
+  border-color: var(--color-on-accent);
+  background: var(--color-accent);
+}
+
+.mini__body {
+  display: grid;
+  gap: 0.55em;
+  padding: 0.7em;
+}
+
+.mini__aa {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 2.6em;
+  font-weight: var(--heading-weight);
+  line-height: 1;
+}
+
+.mini__text,
+.mini__muted {
+  margin: 0;
+  line-height: 1.25;
+}
+
+.mini__text {
+  font-weight: 700;
+}
+
+.mini__muted {
+  color: var(--color-text-muted);
+}
+
+.mini__card {
+  display: flex;
+  gap: 0.4em;
+  padding: 0.5em;
+  border: var(--card-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.mini__state {
+  display: grid;
+  place-items: center;
+  width: 1.9em;
+  height: 1.9em;
+  border: 0.14em solid;
+  border-radius: 50%;
+}
+
+.mini__state .icon {
+  width: 1.1em;
+  height: 1.1em;
+}
+
+.mini__state--ok {
+  border-color: var(--color-correct);
+  background: var(--color-correct-bg);
+  color: var(--color-correct);
+}
+
+.mini__state--bad {
+  border-color: var(--color-wrong);
+  background: var(--color-wrong-bg);
+  color: var(--color-wrong);
+}
+
+.mini__btn {
+  display: block;
+  padding: 0.5em 0.4em;
+  border-radius: var(--radius-button);
+  background: var(--button-primary-bg);
+  box-shadow: var(--shadow-button);
+  color: var(--color-on-primary);
+  font-weight: 800;
+  text-align: center;
+}
+
+.mini-caption {
+  margin: 0.5rem 0 0;
+  font-weight: 800;
+  text-align: center;
+}
+
+@media (min-width: 40rem) {
+  .mini-strip {
+    gap: 1rem;
+  }
+}
+
+/* page heading sample */
+.unit-head {
+  padding: 1.25rem;
+  border: var(--card-border);
+  border-radius: var(--radius-lg);
+  background-image: radial-gradient(circle at 96% 8%, rgba(255, 255, 255, 0.14) 0 4rem, transparent 4.1rem), var(--hero-bg);
+  box-shadow: var(--shadow-card);
+  color: var(--color-on-hero);
+}
+
+.unit-head h4 {
+  margin: 0;
+  font-size: clamp(1.4rem, 5.5vw, 2rem);
+}
+
+.unit-head p {
+  margin: 0.35rem 0 0;
+}
+
+/* breadcrumb */
+.breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.975rem;
+}
+
+.breadcrumb li {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.breadcrumb li:not(:last-child)::after {
+  content: "\203A";
+  content: "\203A" / "";
+  margin-left: 0.5rem;
+  color: var(--color-text-muted);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.breadcrumb a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.breadcrumb [aria-current="page"] {
+  font-weight: 800;
+}
+
+/* unit cards */
+.unit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  gap: 0.8rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.unit-card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  height: 100%;
+  min-height: 44px;
+  padding: 1rem;
+  border: var(--card-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.unit-card:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translate(-2px, -2px);
+}
+
+.unit-card__num {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  border-radius: var(--radius-md);
+  background: var(--hero-bg);
+  color: var(--color-on-hero);
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 900;
+}
+
+.unit-card__body {
+  min-width: 0;
+}
+
+.unit-card__title {
+  margin: 0;
+  font-size: 1.05rem;
+  overflow-wrap: anywhere;
+}
+
+.unit-card__meta {
+  margin: 0.2rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.unit-card__go {
+  flex: none;
+  margin-left: auto;
+  color: var(--color-link);
+}
+
+/* materials */
+.material {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.material__head {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.material__icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-alt);
+  color: var(--color-link);
+}
+
+.material__icon .icon {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.material__head > div {
+  min-width: 0;
+}
+
+.material__title,
+.recent__title {
+  margin: 0;
+  font-size: 1.05rem;
+  overflow-wrap: anywhere;
+}
+
+.material__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.15rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.kind {
+  padding: 0 0.5rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.material__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.video-cover {
+  position: relative;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  padding: 1rem;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-md);
+  background-image: radial-gradient(circle at 94% 8%, rgba(255, 255, 255, 0.14) 0 4rem, transparent 4.1rem),
+    radial-gradient(circle at 4% 100%, rgba(255, 255, 255, 0.1) 0 5rem, transparent 5.1rem), var(--hero-bg);
+  color: var(--color-on-hero);
+  font: inherit;
+  font-weight: 800;
+  text-align: center;
+  cursor: pointer;
+}
+
+.video-cover__play {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: var(--color-on-hero);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  color: var(--color-hero-from);
+  transition: transform 0.15s ease;
+}
+
+.video-cover:hover .video-cover__play {
+  transform: scale(1.08);
+}
+
+.video-cover__play .icon {
+  width: 1.9rem;
+  height: 1.9rem;
+  margin-left: 0.2rem;
+}
+
+/* a video's own picture, saved on the site at build time (library/thumbnails.py): darkened under the play circle and the words */
+.video-cover__picture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.55);
+}
+
+.video-cover--picture > span {
+  position: relative;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.material__note {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.download-size {
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+/* ---------- the slide player (library/static/library/js/deck.js; v1.5, his choice A) ----------
+   The computer first: wider than the text column, up to the slides' own width (86rem = 1376 px), and no wider than lets the
+   slide and its bar fit in the window. The stage is a frame as tall as its pictures (their width / height attributes); inside it
+   the track is the strip the script scrolls sideways to a slide — it writes no style, so the page policy holds — and the round
+   buttons, the hint, the note and the end screen sit on the frame, above the strip. */
+.container--deck {
+  width: min(100% - 2rem, 86rem);
+}
+
+/* a slide-deck page has a slimmer title, so the slide and its bar fit in the window (19rem = the header, the path, this title
+   and the bar under the slide) */
+.page-head--deck .breadcrumb {
+  margin-bottom: 0.6rem;
+}
+
+.page-head--deck .unit-head {
+  padding: 0.7rem 1.1rem;
+}
+
+.page-head--deck .unit-head p {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.page-head--deck .unit-head h1 {
+  font-size: clamp(1.15rem, 2.4vw, 1.55rem);
+}
+
+.deck {
+  width: min(100%, max(20rem, calc((100vh - 19rem) * 16 / 9)));
+  margin: 1rem auto 0;
+  overflow: hidden;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+/* a phone held sideways is too short for the header, the title AND the slide: the slide then fits the screen's height alone
+   (the title scrolls away above it, the bar below it) instead of shrinking to a strip — measured on the live site 2026-10-29:
+   100 px wide at 780 × 360 (LOG ENTRY 033); svh = the height while the browser's address bar shows */
+@media (orientation: landscape) and (max-height: 36rem) {
+  .deck {
+    width: min(100%, max(20rem, calc((100vh - 1.5rem) * 16 / 9)));
+    width: min(100%, max(20rem, calc((100svh - 1.5rem) * 16 / 9)));
+  }
+}
+
+html.no-scroll,
+html.no-scroll body {
+  overflow: hidden;
+}
+
+.deck__stage {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-deck-stage);
+  cursor: pointer;
+  touch-action: pan-y; /* no browser pinch here: the script zooms the slide itself, in and out of full screen */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.deck__track {
+  display: flex;
+  overflow: hidden;
+}
+
+.deck__slide {
+  position: relative; /* holds its visually hidden text caption inside the slide */
+  flex: 0 0 100%;
+  margin: 0;
+}
+
+.deck__slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+/* the zoom layer (deck.js): the current slide's picture at 1x-3x the stage's width, scrolled by the browser itself. It lies on the
+   track and under the round buttons, the hint, the note and the end screen (it comes before them in the page). The script sets the
+   picture's size only through its width and height ATTRIBUTES — the page policy has no style written from script — so this
+   picture has no width rule at all, and the page's own `img { max-width: 100% }` must lose to the line here. The picture is
+   centred while it is smaller than the layer (an auto margin gives no room to scroll back from, unlike centring with justify) */
+.deck__zoom {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  overflow: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-x pan-y;
+  background: var(--color-deck-stage);
+  cursor: grab;
+}
+
+.deck__zoom[hidden] {
+  display: none;
+}
+
+.deck__zoom img {
+  flex: none;
+  margin: auto;
+  max-width: none;
+  height: auto;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+/* without scripting: a horizontal strip the visitor scrolls sideways — never a vertical one */
+.no-js .deck__stage {
+  cursor: auto;
+}
+
+.no-js .deck__track {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+}
+
+.no-js .deck__slide {
+  scroll-snap-align: start;
+}
+
+.deck__nav {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--color-on-deck-stage);
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.85;
+  transform: translateY(-50%);
+}
+
+.deck__nav:hover {
+  background: rgba(0, 0, 0, 0.7);
+  opacity: 1;
+}
+
+.deck__nav:disabled {
+  cursor: default;
+  opacity: 0.25;
+}
+
+.deck__nav--prev {
+  left: 10px;
+}
+
+.deck__nav--next {
+  right: 10px;
+}
+
+.deck__hint {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  max-width: calc(100% - 24px);
+  margin: 0;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.72);
+  color: var(--color-on-deck-stage);
+  font-size: 0.85rem;
+  text-align: center;
+  pointer-events: none;
+  transform: translateX(-50%);
+  transition: opacity 0.5s;
+}
+
+.deck__hint.is-gone {
+  opacity: 0;
+}
+
+.deck__hint-touch {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .deck__hint-mouse {
+    display: none;
+  }
+
+  .deck__hint-touch {
+    display: inline;
+  }
+}
+
+.deck__toast {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px 6px 14px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  transform: translateX(-50%);
+}
+
+.deck__toast[hidden] {
+  display: none;
+}
+
+.deck__toast button {
+  min-height: 36px;
+  padding: 4px 12px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.deck__done {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: var(--hero-bg);
+  color: var(--color-on-hero);
+  text-align: center;
+}
+
+.deck__done[hidden] {
+  display: none;
+}
+
+.deck__done-title {
+  margin: 0;
+  font-size: clamp(2rem, 7vw, 3.6rem);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.deck__done-text {
+  margin: 0;
+}
+
+.deck__done-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.deck__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+}
+
+.deck__bar button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 6px 12px;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.deck__bar button:hover {
+  background: var(--color-surface-alt);
+}
+
+.deck__bar button:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+.deck__bar [data-action="prev"],
+.deck__bar [data-action="next"] {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.deck__count {
+  min-width: 4.6em;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* zoom out / the slider / zoom in / the level (back to normal size), the order every office program has; the level's width is fixed
+   so the bar does not jump with the number (the selector says .deck__bar too: `.deck__bar button` above would win over the bare class) */
+.deck__zoom-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.deck__bar .deck__zoom-level {
+  min-width: 3.6em;
+  padding-inline: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* the slider: a thin track like the progress bar's and a round thumb big enough for a finger, inside a 44 px tall place to touch.
+   A browser drops a whole rule over a selector it does not know, so each engine's parts have their own rules */
+.deck__zoom-slider {
+  flex: 0 1 7rem;
+  width: 7rem;
+  min-width: 0;
+  height: 44px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.deck__zoom-slider::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-divider);
+}
+
+.deck__zoom-slider::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-divider);
+}
+
+.deck__zoom-slider::-webkit-slider-thumb {
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  margin-top: -9px;
+  border: 3px solid var(--color-surface);
+  border-radius: 50%;
+  background: var(--color-primary);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.deck__zoom-slider::-moz-range-thumb {
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--color-surface);
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+/* a finger scrolling the page often lands on this long track, and a track moves the thumb to the touch: measured, the slide jumped to 200 %
+   (LOG ENTRY 036). So on a phone and a tablet only the thumb takes a finger, a little bigger, and the rest of the track lets the page scroll */
+@media (pointer: coarse) {
+  .deck__zoom-slider {
+    pointer-events: none;
+  }
+
+  .deck__zoom-slider::-webkit-slider-thumb {
+    width: 30px;
+    height: 30px;
+    margin-top: -12px;
+    pointer-events: auto;
+  }
+
+  .deck__zoom-slider::-moz-range-thumb {
+    width: 30px;
+    height: 30px;
+    pointer-events: auto;
+  }
+}
+
+/* the progress bar is a <progress> element: the script sets its value, never a style */
+.deck__progress {
+  flex: 1 1 100px;
+  height: 8px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 4px;
+  background: var(--color-surface-alt);
+  color: var(--color-primary);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.deck__progress::-webkit-progress-bar {
+  border-radius: 4px;
+  background: var(--color-surface-alt);
+}
+
+.deck__progress::-webkit-progress-value {
+  border-radius: 4px;
+  background: var(--color-primary);
+  transition: width 0.28s ease;
+}
+
+.deck__progress::-moz-progress-bar {
+  border-radius: 4px;
+  background: var(--color-primary);
+}
+
+/* with the zoom's tools the bar is full: on a phone and a small tablet the progress bar gives way first (the count says the same) and
+   the slider takes the room it leaves, where it is needed most (his look, LOG ENTRY 036) */
+@media (max-width: 56rem), (orientation: landscape) and (max-height: 36rem) {
+  .deck__progress {
+    display: none;
+  }
+
+  .deck__zoom-tools {
+    flex: 1 1 auto;
+  }
+
+  .deck__zoom-slider {
+    flex: 1 1 4rem;
+    width: 4rem;
+  }
+}
+
+/* a phone held sideways keeps one row (the full-screen rule counts on a 64 px bar): tightened, and the level gives way to the slider */
+@media (orientation: landscape) and (max-height: 36rem) {
+  .deck__bar {
+    gap: 6px;
+    padding-inline: 8px;
+  }
+
+  .deck__bar button {
+    padding-inline: 8px;
+  }
+
+  .deck__zoom-tools {
+    gap: 2px;
+  }
+
+  .deck__bar .deck__zoom-level {
+    display: none;
+  }
+
+  .deck__count {
+    min-width: 3.8em;
+  }
+}
+
+/* the smallest phones held sideways have no room for a slider worth the name: their + and - stay */
+@media (orientation: landscape) and (max-height: 36rem) and (max-width: 600px) {
+  .deck__zoom-slider {
+    display: none;
+  }
+}
+
+/* an upright phone: three rows, the middle one all the slider's, as long as the screen is wide */
+@media (orientation: portrait) and (max-width: 600px) {
+  .deck__bar {
+    gap: 6px;
+    padding-inline: 8px;
+  }
+
+  .deck__bar button {
+    padding-inline: 8px;
+  }
+
+  .deck__count {
+    flex: 1 1 auto;
+    min-width: 3.8em;
+  }
+
+  .deck__zoom-tools {
+    flex: 1 1 100%;
+  }
+
+  .deck__bar .deck__zoom-level {
+    min-width: 3em;
+    padding-inline: 2px;
+  }
+
+  .deck__bar [data-action="thumbs"],
+  .deck__bar [data-action="fullscreen"] {
+    flex: 1 1 0;
+  }
+}
+
+.deck__rotate {
+  display: none;
+  margin: 0;
+  padding: 0 12px 10px;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+/* the list stays open until its button is pressed again (his look, LOG ENTRY 036), so it is low enough to leave the slide in view: an
+   upright screen has the room, a window held sideways gives it what is left under the slide and its bar, and it scrolls by itself */
+.deck__thumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+  max-height: 40vh;
+  padding: 10px;
+  overflow-y: auto;
+  border-top: 1px solid var(--color-divider);
+}
+
+@media (orientation: landscape) {
+  .deck__thumbs {
+    max-height: min(14rem, 33vh);
+  }
+}
+
+.deck__thumbs[hidden] {
+  display: none;
+}
+
+.deck__bar [data-action="thumbs"][aria-expanded="true"] {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.deck__thumb {
+  position: relative;
+  padding: 0;
+  border: 3px solid transparent;
+  border-radius: 9px;
+  background: none;
+  cursor: pointer;
+}
+
+.deck__thumb img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.deck__thumb span {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  padding: 0 7px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.7);
+  color: var(--color-on-deck-stage);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.deck__thumb.is-current {
+  border-color: var(--color-primary);
+}
+
+@media (orientation: portrait) and (max-width: 600px) {
+  .deck__rotate {
+    display: block;
+  }
+
+  .deck__hint {
+    bottom: 8px;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .deck__nav {
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+  }
+
+  .deck__nav--prev {
+    left: 6px;
+  }
+
+  .deck__nav--next {
+    right: 6px;
+  }
+}
+
+/* full screen: the browser's own, or the in-page layer where the browser has none (iPhone) */
+.deck:fullscreen,
+.deck.is-pseudo-fullscreen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: auto;
+  border: 0;
+  border-radius: 0;
+  background: var(--color-deck-stage);
+}
+
+.deck.is-pseudo-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  height: 100vh;
+  height: 100dvh;
+  margin: 0;
+}
+
+.deck:fullscreen .deck__stage {
+  width: min(100vw, calc((100vh - 64px) * 16 / 9));
+  margin: 0 auto;
+}
+
+.deck.is-pseudo-fullscreen .deck__stage {
+  width: min(100vw, calc((100dvh - 64px) * 16 / 9));
+  margin: 0 auto;
+}
+
+/* full screen with the list open: the list takes at most a third of the height and the slide gives way, so the slide, the bar and the
+   list all show at once. Held sideways the slide takes exactly what the list leaves (a very wide screen needs one row of small pictures
+   and the slide hardly changes); upright, the screen's width sets its size anyway. The in-page layer is the iPhone's, where a list
+   always fills its third: that one stays a sum */
+.deck:fullscreen .deck__thumbs {
+  max-height: 33vh;
+}
+
+.deck.is-pseudo-fullscreen .deck__thumbs {
+  max-height: 33dvh;
+}
+
+@media (orientation: landscape) {
+  .deck.is-listing:fullscreen .deck__stage {
+    flex: 1 1 0;
+    align-self: center;
+    width: auto;
+    min-height: 0;
+    max-width: 100vw;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+.deck.is-listing.is-pseudo-fullscreen .deck__stage {
+  width: min(100vw, calc((67dvh - 64px) * 16 / 9));
+}
+
+.deck:fullscreen .deck__bar,
+.deck.is-pseudo-fullscreen .deck__bar {
+  width: min(100vw, 1100px);
+  margin: 0 auto;
+  color: var(--color-on-deck-stage);
+}
+
+.deck:fullscreen .deck__progress,
+.deck.is-pseudo-fullscreen .deck__progress {
+  background: var(--color-deck-line);
+}
+
+.deck:fullscreen .deck__zoom-slider::-webkit-slider-runnable-track,
+.deck.is-pseudo-fullscreen .deck__zoom-slider::-webkit-slider-runnable-track {
+  background: var(--color-deck-line);
+}
+
+.deck:fullscreen .deck__zoom-slider::-moz-range-track,
+.deck.is-pseudo-fullscreen .deck__zoom-slider::-moz-range-track {
+  background: var(--color-deck-line);
+}
+
+.deck:fullscreen .deck__thumbs,
+.deck.is-pseudo-fullscreen .deck__thumbs {
+  border-color: var(--color-deck-line);
+  background: var(--color-deck-panel);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deck__progress::-webkit-progress-value,
+  .deck__hint {
+    transition: none;
+  }
+}
+
+/* question */
+.question__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 0.9rem;
+}
+
+.question__count {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-weight: 800;
+}
+
+.question__stem {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.options {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3.4rem;
+  padding: 0.6rem 0.9rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.option__key {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.option__text {
+  flex: 1;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.option__state {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.option--correct {
+  border-color: var(--color-correct);
+  background: var(--color-correct-bg);
+}
+
+.option--correct .option__key {
+  background: var(--color-correct);
+  border-color: var(--color-correct);
+  color: var(--color-correct-bg);
+}
+
+.option--correct .option__state {
+  color: var(--color-correct);
+}
+
+.option--wrong {
+  border-color: var(--color-wrong);
+  background: var(--color-wrong-bg);
+}
+
+.option--wrong .option__key {
+  background: var(--color-wrong);
+  border-color: var(--color-wrong);
+  color: var(--color-wrong-bg);
+}
+
+.option--wrong .option__state {
+  color: var(--color-wrong);
+}
+
+.option--wrong .option__text {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+.solution {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border-left: 0.4rem solid var(--color-link);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-alt);
+}
+
+.solution h4 {
+  margin-bottom: 0.25rem;
+}
+
+.solution p {
+  margin: 0;
+}
+
+.replay {
+  margin-top: 1rem;
+}
+
+.motion-note {
+  display: none;
+  margin: 1rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+/* fill in the blank */
+.fill-stem {
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 2.2;
+}
+
+.fill-input {
+  display: inline-block;
+  width: 8.5rem;
+  min-height: 44px;
+  margin-inline: 0.2rem;
+  padding: 0.25rem 0.75rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 700;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.fill-input.is-correct {
+  border-color: var(--color-correct);
+  background: var(--color-correct-bg);
+}
+
+.fill-feedback {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  color: var(--color-correct);
+  font-weight: 800;
+}
+
+.word-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.4rem 0 0.9rem;
+  padding: 0;
+  list-style: none;
+}
+
+.word-bank-label {
+  margin: 0.75rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+/* timer */
+.timer-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1rem;
+}
+
+.timer-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.25rem;
+  padding: 0.15rem 0.85rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+.timer-chip--low {
+  border-color: var(--color-wrong);
+  background: var(--color-wrong-bg);
+  color: var(--color-wrong);
+  animation: pulse 1s ease-in-out 3;
+}
+
+/* end-of-test summary */
+.result {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.result__title {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.result__net {
+  display: grid;
+  place-content: center;
+  width: 8.5rem;
+  height: 8.5rem;
+  border-radius: 50%;
+  background: var(--hero-bg);
+  box-shadow: var(--shadow-card);
+  color: var(--color-on-hero);
+}
+
+.result__net-label {
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.result__net-value {
+  font-family: var(--font-heading);
+  font-size: 2.4rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.result__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+  width: 100%;
+  margin: 0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 0.7rem 0.25rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.stat dt {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.stat dd {
+  margin: 0;
+  font-size: 1.8rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.stat--correct {
+  border-color: var(--color-correct);
+  background: var(--color-correct-bg);
+}
+
+.stat--correct dd {
+  color: var(--color-correct);
+}
+
+.stat--wrong {
+  border-color: var(--color-wrong);
+  background: var(--color-wrong-bg);
+}
+
+.stat--wrong dd {
+  color: var(--color-wrong);
+}
+
+.result__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* ---------- 8. Small answer effects (all switched off for "reduce motion") ---------- */
+@keyframes pop {
+  0% {
+    transform: scale(0.95);
+  }
+
+  45% {
+    transform: scale(1.04);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-7px);
+  }
+
+  40% {
+    transform: translateX(6px);
+  }
+
+  60% {
+    transform: translateX(-4px);
+  }
+
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.07);
+  }
+}
+
+.option--correct.is-animated {
+  animation: pop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+
+.option--wrong.is-animated {
+  animation: shake 0.4s ease-in-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+
+  .replay {
+    display: none;
+  }
+
+  .motion-note {
+    display: block;
+  }
+}
+
+/* ---------- 9. Library pages (subject, grade, programme, unit, material) and their home-page links ---------- */
+/* a grade card that opens its grade: the link covers the whole card */
+.grade-card--link .grade-card__title {
+  position: static;
+}
+
+.grade-card__link {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.grade-card__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: var(--radius-lg);
+}
+
+.grade-card__link:focus-visible {
+  outline: none;
+}
+
+.grade-card__link:focus-visible::after {
+  outline: 3px solid var(--color-focus);
+  outline-offset: -3px; /* inside the card: its overflow is hidden, an outer ring would be cut off */
+}
+
+.grade-card__go {
+  position: relative;
+  z-index: 1;
+  width: 1.75rem;
+  height: 1.75rem;
+  color: var(--color-link);
+}
+
+/* the page banner holds an h1 here (the preview sample used an h4) */
+.unit-head h1 {
+  margin: 0;
+  font-size: clamp(1.4rem, 5.5vw, 2rem);
+  overflow-wrap: anywhere;
+}
+
+.page-head .breadcrumb {
+  margin-bottom: 0.9rem;
+}
+
+/* a unit with nothing to show yet: a card, not a link */
+.unit-card--soon {
+  opacity: 0.85;
+}
+
+.unit-card--soon:hover {
+  box-shadow: var(--shadow-card);
+  transform: none;
+}
+
+.material__title a {
+  color: inherit;
+}
+
+/* the cover for a document or file preview: the same cover with a document in the circle */
+.video-cover--document .video-cover__play .icon {
+  margin-left: 0;
+}
+
+/* the frame that replaces the cover after the tap */
+.embed-frame {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-alt);
+}
+
+.embed-frame--video {
+  aspect-ratio: 16 / 9;
+}
+
+.embed-frame--document {
+  aspect-ratio: 3 / 4;
+  max-height: 85vh;
+}
+
+/* ---------- Practice tests (v1.6, PLAN.md §2b; v1.7 §2c; practice/templates/practice/test.html, practice/static/practice/js/player.js) ----------
+   The computer first: one question on the screen at a time with the number strip above it and ← / → under it, the answer sheet on
+   the right and kept in view. On a phone the question fills the screen and the sheet is a drawer from the bottom ("Cevap kâğıdı").
+   The player writes no style: it only switches the `hidden` attribute, aria-pressed / aria-current / aria-disabled and the classes
+   below (on .test: is-running, is-finished, is-exam, is-practice). */
+.container--test {
+  width: min(100% - 2rem, 86rem);
+}
+
+/* with scripting on, the pages wait behind the start screen (no flash before player.js hides them); without it they show */
+html:not(.no-js) .test:not(.is-running):not(.is-finished) .test__work {
+  display: none;
+}
+
+/* whatever the player hides stays hidden, whatever display its own rule gives it (a button, a question, a clock) */
+.test [hidden] {
+  display: none;
+}
+
+.test__time-up {
+  margin: 0 0 0.75rem;
+  color: var(--color-wrong);
+  font-weight: 800;
+}
+
+.test__start {
+  max-width: 44rem;
+  margin: 0 auto 1.5rem;
+  text-align: center;
+}
+
+.test__facts {
+  margin: 0 0 1rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.test__modes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.test__help {
+  margin: 0.9rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+.test__bar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1rem;
+  margin-bottom: 1rem;
+  padding: 0.6rem 1rem;
+  border: var(--card-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.test__bar[hidden] {
+  display: none;
+}
+
+.test__clock {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.test__clock-label {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.test__timer {
+  font-size: 1.3rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+/* the question's countdown at zero: red, counting the time over it ("+0:20"); the student stays on the question */
+.test__clock--question.is-over .test__timer,
+.test__clock--question.is-over .test__clock-label {
+  color: var(--color-wrong);
+}
+
+/* practice has no countdown: the time used is shown small */
+.test.is-practice .test__timer {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.test__answered {
+  margin-right: auto;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.test__confirm {
+  margin-bottom: 1rem;
+}
+
+.test__confirm p {
+  margin: 0 0 0.75rem;
+  font-weight: 700;
+}
+
+.test__layout {
+  display: grid;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+/* the number strip: one button per question — current (a ring), answered (filled), and once marked right / wrong / blank */
+.test__strip {
+  margin-bottom: 1rem;
+}
+
+.strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.strip__number {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0 0.4rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.strip__number:hover {
+  border-color: var(--color-primary);
+}
+
+.strip__number:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.strip__number.is-answered {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.strip__number.is-right {
+  border-color: var(--color-correct);
+  background: var(--color-correct-bg);
+  color: var(--color-correct);
+}
+
+.strip__number.is-wrong {
+  border-color: var(--color-wrong);
+  background: var(--color-wrong-bg);
+  color: var(--color-wrong);
+}
+
+.strip__number.is-blank {
+  border-style: dashed;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+}
+
+.strip__number[aria-current="true"] {
+  box-shadow: 0 0 0 2px var(--color-surface), 0 0 0 5px var(--color-primary);
+}
+
+/* v1.7 (PLAN.md §2c): each question cut out of its page — its pieces one under another, and over each piece an SVG of the same
+   size holding its option areas and the pen circles (drawn by the server; the player only switches classes). One question is
+   shown at a time; ← / → under it. */
+.test__questions {
+  display: flex; /* a column (not a grid) so the tool bar can stay in view while a tall question is scrolled */
+  flex-direction: column;
+  gap: 1rem;
+  scroll-margin-top: 6rem; /* below the sticky bar when the player brings a question's top into view */
+}
+
+/* the free pen's tool bar (PLAN.md §2c point 4; practice/static/practice/js/pen.js): shown while the test runs only — not on the
+   start screen, the result or the review — and only when pen.js has revealed it (it has the `hidden` attribute until then) */
+.test__tools {
+  display: none;
+}
+
+.test.is-running .test__tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.test .test__tools[hidden] {
+  display: none;
+}
+
+.tool {
+  padding-inline: 0.85rem;
+}
+
+.tool[aria-pressed="true"] {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.tool[aria-pressed="true"]:hover {
+  background: var(--color-primary-hover);
+}
+
+.tool--first-action {
+  margin-inline-start: auto; /* "Geri al" and "Temizle" sit apart from the four tools */
+}
+
+/* the computer: the tool bar stays in view under the clock bar while a tall question is scrolled */
+@media (min-width: 56rem) {
+  .test.is-running .test__tools {
+    position: sticky;
+    top: 4.5rem;
+    z-index: 4;
+  }
+}
+
+/* a phone, or a low screen held sideways: the clock bar wraps to two or three rows there (measured: 163 px at 360–414 px wide),
+   so it scrolls away with the page instead of covering the question, and so does the tool bar (DIRECTOR RULED 2026-10-29, LOG
+   ENTRY 025); the computer keeps both in view */
+@media (max-width: 40rem), (max-height: 30rem) {
+  .test__bar,
+  .test.is-running .test__tools {
+    position: static;
+  }
+
+  .test__questions {
+    scroll-margin-top: 0.5rem;
+  }
+}
+
+.test__nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.test__position {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* a phone: "Soru 2 / 7" on its own line, the two buttons under it side by side */
+@media (max-width: 40rem) {
+  .test__position {
+    flex-basis: 100%;
+    order: -1;
+    text-align: center;
+  }
+}
+
+.question {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+.question__piece {
+  position: relative;
+  margin: 0;
+  max-width: 100%;
+}
+
+/* on a computer each piece keeps the share of the page it was cut from (practice/cutting.py `display_size`): the text of a
+   one-column question and of a whole-page one shows at about the same size; on a phone every piece fills the width */
+@media (min-width: 56rem) {
+  .question__piece--s50 {
+    width: 50%;
+  }
+
+  .question__piece--s55 {
+    width: 55%;
+  }
+
+  .question__piece--s60 {
+    width: 60%;
+  }
+
+  .question__piece--s65 {
+    width: 65%;
+  }
+
+  .question__piece--s70 {
+    width: 70%;
+  }
+
+  .question__piece--s75 {
+    width: 75%;
+  }
+
+  .question__piece--s80 {
+    width: 80%;
+  }
+
+  .question__piece--s85 {
+    width: 85%;
+  }
+
+  .question__piece--s90 {
+    width: 90%;
+  }
+
+  .question__piece--s95 {
+    width: 95%;
+  }
+
+  .question__piece--s100 {
+    width: 100%;
+  }
+}
+
+.question__piece img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.question__overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* the SVG lets every tap through except on an option's area: a tap there chooses it */
+.question__hit {
+  fill: transparent;
+  pointer-events: all;
+  cursor: pointer;
+}
+
+.test:not(.is-running) .question__hit,
+.question.is-locked .question__hit {
+  cursor: default;
+}
+
+.test.is-running .question:not(.is-locked) .question__option:hover .question__hit {
+  fill: var(--color-primary);
+  fill-opacity: 0.08;
+}
+
+/* the pen line is 3 screen pixels however small the picture is drawn (a phone): the server's stroke-width is the fallback */
+.question__circle {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 3px;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0;
+}
+
+.question__option.is-chosen .question__circle,
+.question__option.is-answer .question__circle {
+  stroke-dashoffset: 0;
+  opacity: 1;
+  transition: stroke-dashoffset 0.45s ease-out;
+}
+
+/* once marked: the right option circled in green, a wrong choice's circle red */
+.question__option.is-answer .question__circle {
+  stroke: var(--color-correct);
+}
+
+.question__option.is-wrong .question__circle {
+  stroke: var(--color-wrong);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .question__option.is-chosen .question__circle,
+  .question__option.is-answer .question__circle {
+    transition: none;
+  }
+}
+
+/* "Cross out" (the free pen; v1.8): a line like one the student drew with the pen through the option (practice/cutting.py
+   pen_strike), in the pen colour, drawn as quickly as the circle, thin enough that the option stays readable — the student's own
+   reminder. No wash over the option: it read like a choice. */
+.question__strike {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2.5px;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.question__option.is-struck .question__strike {
+  stroke-dashoffset: 0;
+  opacity: 0.85;
+  transition: stroke-dashoffset 0.3s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .question__option.is-struck .question__strike {
+    transition: none;
+  }
+}
+
+/* The pen's surfaces (v1.8): two canvases over each picture (glued to it: they scale with it) and two over the whole question
+   body — the scratch paper, on top of everything. No canvas over a picture ever takes the pointer; while a drawing tool is on
+   (the script puts is-drawing on the question, with is-pen / is-highlighter / is-eraser / is-line-eraser) the body's top scratch
+   canvas takes it, and the script sends a gesture that starts on a picture to that picture's canvas, any other to the scratch
+   paper. Then the question does not scroll or zoom under the finger or the stylus (touch-action: none) and the option areas
+   below do not answer; with "İşaretle" or "Ele" back on, the page scrolls and the taps work again. The ink colour is the canvas
+   element's own colour (the script reads it), so it follows the theme; the highlighter is the accent colour drawn solid on its
+   own canvas and made see-through here, so strokes never darken where they cross. */
+.question__body {
+  position: relative;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.question__canvas,
+.question__scratch {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.question__scratch {
+  z-index: 2;
+}
+
+.question__canvas--ink,
+.question__scratch--ink {
+  color: var(--color-primary);
+}
+
+.question__canvas--marker,
+.question__scratch--marker {
+  color: var(--color-accent);
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+}
+
+.question.is-drawing .question__scratch--ink {
+  pointer-events: auto;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+/* the erasers' cursors: round pictures written into this file (a data: picture loads nothing from outside — his ruling B, LOG
+   029; test_core_pages, the leak scan); their quotes are percent-encoded so the scan's data: exemption covers each one whole.
+   "Silgi" shows the 24 px it rubs (pen.js ERASER_SIZE), "Çizgi silgisi" a dashed ring of its reach (LINE_REACH) with a dot at the
+   point; black on white so they show on every theme (a cursor picture cannot read the colour tokens); the browser's own cursor
+   if a picture is refused */
+.question.is-eraser .question__scratch--ink {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2226%22 height=%2226%22%3E%3Ccircle cx=%2213%22 cy=%2213%22 r=%2212%22 fill=%22white%22 fill-opacity=%220.3%22 stroke=%22black%22 stroke-width=%221.5%22/%3E%3Ccircle cx=%2213%22 cy=%2213%22 r=%2210.5%22 fill=%22none%22 stroke=%22white%22 stroke-width=%221.5%22/%3E%3C/svg%3E") 13 13, cell;
+}
+
+.question.is-line-eraser .question__scratch--ink {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2224%22 height=%2224%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%2210%22 fill=%22none%22 stroke=%22white%22 stroke-width=%223%22/%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%2210%22 fill=%22none%22 stroke=%22black%22 stroke-width=%221.5%22 stroke-dasharray=%223 2%22/%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%221.5%22 fill=%22black%22 stroke=%22white%22/%3E%3C/svg%3E") 12 12, pointer;
+}
+
+/* the scratch strip under the pictures: the student's paper on a phone (the pictures fill the width) and under a whole-width
+   question; shown while a drawing tool is on, and kept while the scratch paper holds ink (has-scratch, set by the script); a
+   little apart from the last option (his ruling, LOG ENTRY 028); its name and the note on turning a tablet at its top */
+.question__scratch-strip {
+  display: none;
+  min-height: 12rem;
+  margin-top: 1rem;
+  padding: 0.35rem 0.6rem;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.question.is-drawing .question__scratch-strip,
+.question.has-scratch .question__scratch-strip {
+  display: block;
+}
+
+.question__scratch-label,
+.question__scratch-note {
+  display: block;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.question__scratch-note {
+  max-width: 40rem;
+  margin-top: 0.15rem;
+  font-size: 0.75rem;
+}
+
+/* the scroll rail beside a question (his wish, LOG ENTRY 033; plan v1.11, his look: one quiet sign, no band): while a drawing tool is
+   on the question does not scroll under the finger, so on a touch screen a slim margin of the question is the place that does, like
+   the ruled margin of a notebook page. It reaches from the screen's edge (2.5rem: the page's 1rem gutter, the border and this padding)
+   to a hairline inside the question; its one sign stays in the middle of the screen however long the question is, and is drawn with
+   the theme's own colour. The room is kept for the whole running test, so the picture does not jump when a tool is switched on. A
+   mouse has its wheel: nothing changes there */
+.question__rail {
+  display: none;
+}
+
+@media (any-pointer: coarse) {
+  .test.is-running .question {
+    position: relative;
+    padding-left: calc(1.5rem - 1px);
+  }
+
+  .question.is-drawing .question__rail {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(-1rem - 1px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 2.5rem;
+    padding-left: 1rem;
+    border-right: 1px solid var(--color-divider);
+    touch-action: pan-y;
+  }
+
+  .question__rail-sign {
+    position: sticky;
+    top: calc(50vh - 1rem);
+    bottom: calc(50vh - 1rem);
+    display: grid;
+    gap: 0.5rem;
+    justify-items: center;
+  }
+
+  .question__rail-sign::before,
+  .question__rail-sign::after {
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    border: solid var(--color-text-muted);
+    border-width: 2px 0 0 2px;
+    transform: rotate(45deg);
+  }
+
+  .question__rail-sign::after {
+    transform: rotate(225deg);
+  }
+}
+
+.question__hint {
+  margin: 0.25rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+/* under a marked question (practice at once, the exam in the review): the result, the time spent, the solution buttons */
+.question__after {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  border-left: 3px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.question.is-right .question__after {
+  border-left-color: var(--color-correct);
+}
+
+.question.is-wrong .question__after {
+  border-left-color: var(--color-wrong);
+}
+
+.question__result {
+  margin: 0;
+  font-weight: 800;
+}
+
+.question.is-right .question__result {
+  color: var(--color-correct);
+}
+
+.question.is-wrong .question__result {
+  color: var(--color-wrong);
+}
+
+.question__spent {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.question__help {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.question__help > .embed-frame {
+  flex: 1 1 100%; /* the video, once its cover button is tapped, takes the whole width */
+}
+
+.question__solution {
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid var(--color-correct);
+  border-radius: var(--radius-sm);
+  background: var(--color-correct-bg);
+}
+
+.question__solution p {
+  margin: 0;
+}
+
+.test__sheet-title {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.sheet {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sheet__row {
+  display: grid;
+  grid-template-columns: 2.4rem 1fr auto;
+  align-items: center;
+  gap: 0.25rem 0.5rem;
+  padding: 0.3rem 0.4rem;
+  border-radius: var(--radius-sm);
+}
+
+.sheet__row.is-current {
+  background: var(--color-surface-alt);
+}
+
+.sheet__number {
+  font-weight: 800;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.sheet__options {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.sheet__option {
+  min-width: 2.4rem;
+  min-height: 2.4rem;
+  border: 2px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sheet__option:hover:not(:disabled) {
+  border-color: var(--color-primary);
+}
+
+.sheet__option:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.sheet__option[aria-pressed="true"] {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.sheet__option:disabled {
+  cursor: default;
+}
+
+.sheet__option.is-answer {
+  border-color: var(--color-correct);
+  box-shadow: 0 0 0 2px var(--color-correct);
+}
+
+.sheet__row.is-right .sheet__option[aria-pressed="true"] {
+  border-color: var(--color-correct);
+  background: var(--color-correct);
+  color: var(--color-surface);
+}
+
+.sheet__row.is-wrong .sheet__option[aria-pressed="true"] {
+  border-color: var(--color-wrong);
+  background: var(--color-wrong);
+  color: var(--color-surface);
+}
+
+.sheet__mark {
+  min-width: 1.5rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.sheet__row.is-right .sheet__mark {
+  color: var(--color-correct);
+}
+
+.sheet__row.is-wrong .sheet__mark {
+  color: var(--color-wrong);
+}
+
+.sheet__row.is-blank .sheet__mark {
+  color: var(--color-text-muted);
+}
+
+.test__end {
+  margin-bottom: 1.5rem;
+}
+
+.test__end h2 {
+  margin-top: 0;
+}
+
+.result {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.result div {
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-alt);
+  text-align: center;
+}
+
+.result dt {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.result dd {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+/* the computer: pages and sheet side by side; the sheet stays in view (its own scroll when it is long) */
+@media (min-width: 56rem) {
+  .test__layout {
+    grid-template-columns: minmax(0, 1fr) 21rem;
+  }
+
+  .test__sheet {
+    position: sticky;
+    top: 4.5rem;
+    max-height: calc(100vh - 5.5rem);
+    overflow-y: auto;
+    padding: 1rem;
+    border: var(--card-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-card);
+  }
+
+  .test__sheet-toggle {
+    display: none;
+  }
+}
+
+/* a phone or a narrow window: the sheet is a drawer from the bottom, opened by "Cevap kâğıdı" */
+@media (max-width: 55.99rem) {
+  .test__sheet {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 20;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 1rem 1rem 1.5rem;
+    border-top: 2px solid var(--color-border);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    background: var(--color-surface);
+    box-shadow: var(--shadow-card);
+    transform: translateY(100%);
+    visibility: hidden;
+    transition: transform 0.2s ease, visibility 0.2s;
+  }
+
+  .test__sheet.is-open {
+    transform: none;
+    visibility: visible;
+  }
+
+  /* after the end the sheet is the review: it sits in the page under the result, open */
+  .test.is-finished .test__sheet {
+    position: static;
+    max-height: none;
+    transform: none;
+    visibility: visible;
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .test__sheet {
+    transition: none;
+  }
+}
+
+/* ---------- The sound player (library/templates/library/partials/podcast.html; PLAN.md §2d) ---------- */
+/* one horizontal row in a thin frame of its own (his condition, LOG ENTRY 039). The browser's own player stands here until the script is
+   ready (the class is-ready), so a page without scripts still plays */
+.podcast {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+  min-width: 0;
+  padding: 0.25rem 0.75rem 0.25rem 0.4rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.podcast__native {
+  flex: 1 1 16rem;
+  min-width: 0;
+  max-width: 100%;
+  height: 44px;
+}
+
+.podcast__controls {
+  display: none;
+  flex: 1 1 26rem;
+  align-items: center;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.podcast.is-ready .podcast__native {
+  display: none;
+}
+
+.podcast.is-ready .podcast__controls {
+  display: flex;
+}
+
+.podcast__button {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 0.4rem;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.podcast__button:hover {
+  background: var(--color-surface-alt);
+}
+
+.podcast__play {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--button-primary-bg);
+  color: var(--color-on-primary);
+}
+
+.podcast__play:hover {
+  background: var(--button-primary-bg-hover);
+}
+
+.podcast__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* the button's class says which icon shows; the script never touches the icons themselves (LOG ENTRY 040) */
+.podcast__icon--pause,
+.podcast__play.is-playing .podcast__icon--play {
+  display: none;
+}
+
+.podcast__play.is-playing .podcast__icon--pause {
+  display: block;
+}
+
+.podcast__line {
+  display: flex;
+  flex: 1 1 12rem;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  padding-inline: 0.35rem;
+}
+
+.podcast__time {
+  flex: none;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* the bar: a <progress> for the fill (no style is written from script), the slider's thumb on top of it, in a 44 px tall place to touch */
+.podcast__track {
+  position: relative;
+  display: flex;
+  flex: 1 1 6rem;
+  align-items: center;
+  min-width: 4rem;
+  height: 44px;
+}
+
+.podcast__fill {
+  position: absolute;
+  inset-inline: 0;
+  top: 19px;
+  width: 100%;
+  height: 6px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 3px;
+  background: var(--color-divider);
+  color: var(--color-primary);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.podcast__fill::-webkit-progress-bar {
+  border-radius: 3px;
+  background: var(--color-divider);
+}
+
+.podcast__fill::-webkit-progress-value {
+  border-radius: 3px;
+  background: var(--color-primary);
+}
+
+.podcast__fill::-moz-progress-bar {
+  border-radius: 3px;
+  background: var(--color-primary);
+}
+
+.podcast__seek {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.podcast__seek::-webkit-slider-runnable-track {
+  height: 6px;
+  background: transparent;
+}
+
+.podcast__seek::-moz-range-track {
+  height: 6px;
+  background: transparent;
+}
+
+.podcast__seek::-webkit-slider-thumb {
+  box-sizing: border-box;
+  width: 18px;
+  height: 18px;
+  margin-top: -6px;
+  border: 3px solid var(--color-surface);
+  border-radius: 50%;
+  background: var(--color-primary);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.podcast__seek::-moz-range-thumb {
+  box-sizing: border-box;
+  width: 18px;
+  height: 18px;
+  border: 3px solid var(--color-surface);
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+/* a finger scrolling the page must not jump the sound (the same reason as the slide zoom's slider, LOG ENTRY 036): on a phone and a tablet only
+   the thumb takes a finger, a little bigger, and the rest of the bar lets the page scroll */
+@media (pointer: coarse) {
+  .podcast__seek {
+    pointer-events: none;
+  }
+
+  .podcast__seek::-webkit-slider-thumb {
+    width: 28px;
+    height: 28px;
+    margin-top: -11px;
+    pointer-events: auto;
+  }
+
+  .podcast__seek::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+    pointer-events: auto;
+  }
+}
+
+.podcast__download {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 44px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.podcast__download .icon {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.podcast__message {
+  flex: 1 1 100%;
+  margin: 0 0 0.25rem 0.35rem;
+  color: var(--color-text);
+  font-size: 0.9rem;
+}
+
+/* a narrow row: the buttons above, the bar on a line of its own; the speed stays beside the other buttons */
+@media (max-width: 40rem) {
+  .podcast {
+    padding: 0.25rem 0.4rem;
+  }
+
+  .podcast__controls {
+    flex-wrap: wrap;
+    flex-basis: 100%;
+  }
+
+  .podcast__line {
+    order: 1;
+    flex-basis: 100%;
+    padding-inline: 0.2rem;
+  }
+
+  .podcast__download {
+    padding-inline: 0.35rem;
+  }
+}

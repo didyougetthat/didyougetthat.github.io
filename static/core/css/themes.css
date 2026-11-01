@@ -1,0 +1,216 @@
+/* themes.css — the three looks of the site, written only as CSS custom properties ("tokens").
+
+   HOW IT WORKS
+   - The page picks a look by putting data-theme="light" | "dark" | "vivid" on <html> (theme-init.js does it before the first
+     paint). Any other element can carry data-theme too: that element and everything inside it is drawn in that look. The
+     theme preview page uses this to show all three looks side by side.
+   - site.css never writes a colour: it only reads the tokens below. To change a look, change the numbers here.
+   - The first block (:root + light) is also the fallback when nothing else applies, so the blocks must stay in this order.
+
+   READABILITY RULES (WCAG 2.1 AA) — tests/test_core_pages.py reads the 6-digit hex tokens below and fails when a pair that the
+   site really uses drops under: 4.5 for text on its background, 3 for borders / focus ring against what they sit on.
+     text, text-muted, link ........ on bg, surface (and surface-alt)
+     on-primary .................... on primary, primary-2 and both hover colours (buttons)
+     on-accent ..................... on accent (badges)
+     correct / wrong ............... on surface and on their own tinted background
+     on-header ..................... on header-bg;  on-hero on hero-from and hero-to (gradient ends)
+     border ........................ on surface and bg (3);  focus on bg and surface (3)
+   Keep every colour token a plain 6-digit hex value (#rrggbb) so those tests can read it. */
+
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* surfaces and text */
+  --color-bg: #f4f5fb;
+  --color-surface: #ffffff;
+  --color-surface-alt: #e9ecfa;
+  --color-text: #171a2e;
+  --color-text-muted: #475069;
+  --color-link: #3730a3;
+
+  /* the brand colour: buttons (primary-2 = second gradient stop) */
+  --color-primary: #4338ca;
+  --color-primary-2: #4338ca;
+  --color-primary-hover: #352ba8;
+  --color-primary-2-hover: #352ba8;
+  --color-on-primary: #ffffff;
+
+  /* highlights: badges, "coming soon" stickers, the selected theme button in the header */
+  --color-accent: #ffd166;
+  --color-on-accent: #33260a;
+
+  /* answer states */
+  --color-correct: #0f7a3a;
+  --color-correct-bg: #e2f5e9;
+  --color-wrong: #bf2438;
+  --color-wrong-bg: #fde8eb;
+
+  /* lines and focus */
+  --color-border: #7b839f;
+  --color-divider: #dcdff0;
+  --color-focus: #c2185b;
+
+  /* the bar at the top, and the big coloured banners (hero, video cover, result badge) */
+  --color-header-bg: #ffffff;
+  --color-on-header: #171a2e;
+  --color-hero-from: #3730a3;
+  --color-hero-to: #5b3fd1;
+  --color-on-hero: #ffffff;
+
+  /* the slide player (v1.5): slides are pictures on black in every look; its round buttons, hint and counter sit on them */
+  --color-deck-stage: #000000;
+  --color-on-deck-stage: #ffffff;
+  --color-deck-line: #333333;
+  --color-deck-panel: #111111;
+
+  /* shape, depth, type (free values, not tested) */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-button: 12px;
+  --radius-pill: 999px;
+  --card-border: 1px solid var(--color-divider);
+  --shadow-card: 0 1px 2px rgba(23, 26, 46, 0.06), 0 8px 24px rgba(23, 26, 46, 0.07);
+  --shadow-card-hover: 0 2px 4px rgba(23, 26, 46, 0.08), 0 14px 32px rgba(23, 26, 46, 0.13);
+  --shadow-button: 0 1px 2px rgba(23, 26, 46, 0.18);
+  --header-edge: 1px solid var(--color-divider);
+  --header-bg-image: none;
+  --header-hover: rgba(23, 26, 46, 0.08);
+  --mark-bg: var(--color-primary);
+  --mark-fg: var(--color-on-primary);
+  --button-primary-bg: var(--color-primary);
+  --button-primary-bg-hover: var(--color-primary-hover);
+  --hero-bg: linear-gradient(135deg, var(--color-hero-from), var(--color-hero-to));
+  --page-decor: none;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-heading: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --heading-weight: 800;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-bg: #0e1120;
+  --color-surface: #171b30;
+  --color-surface-alt: #222845;
+  --color-text: #eceeff;
+  --color-text-muted: #a9b0d0;
+  --color-link: #a5a9ff;
+
+  --color-primary: #5b5fe6;
+  --color-primary-2: #5b5fe6;
+  --color-primary-hover: #4a4ed4;
+  --color-primary-2-hover: #4a4ed4;
+  --color-on-primary: #ffffff;
+
+  --color-accent: #ffd166;
+  --color-on-accent: #2a1d00;
+
+  --color-correct: #4ade80;
+  --color-correct-bg: #10341f;
+  --color-wrong: #ff8091;
+  --color-wrong-bg: #3b1822;
+
+  --color-border: #6b7399;
+  --color-divider: #2a3050;
+  --color-focus: #ffd166;
+
+  --color-header-bg: #171b30;
+  --color-on-header: #eceeff;
+  --color-hero-from: #3b3fb8;
+  --color-hero-to: #5b3fd1;
+  --color-on-hero: #ffffff;
+
+  --color-deck-stage: #000000;
+  --color-on-deck-stage: #ffffff;
+  --color-deck-line: #333333;
+  --color-deck-panel: #111111;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-button: 12px;
+  --radius-pill: 999px;
+  --card-border: 1px solid var(--color-divider);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 28px rgba(0, 0, 0, 0.35);
+  --shadow-card-hover: 0 2px 4px rgba(0, 0, 0, 0.45), 0 16px 36px rgba(0, 0, 0, 0.5);
+  --shadow-button: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --header-edge: 1px solid var(--color-divider);
+  --header-bg-image: none;
+  --header-hover: rgba(255, 255, 255, 0.1);
+  --mark-bg: var(--color-accent);
+  --mark-fg: var(--color-on-accent);
+  --button-primary-bg: var(--color-primary);
+  --button-primary-bg-hover: var(--color-primary-hover);
+  --hero-bg: linear-gradient(135deg, var(--color-hero-from), var(--color-hero-to));
+  --page-decor: none;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-heading: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --heading-weight: 800;
+}
+
+/* Vivid ("Canlı"): the teen look — lilac page, white sticker cards with thick violet outlines and hard shadows, a violet-to-pink
+   gradient on the header and the buttons, yellow highlights, rounder shapes. Text stays dark indigo on light surfaces. */
+[data-theme="vivid"] {
+  color-scheme: light;
+
+  --color-bg: #f3eeff;
+  --color-surface: #ffffff;
+  --color-surface-alt: #e8defd;
+  --color-text: #1d1045;
+  --color-text-muted: #4b3f7a;
+  --color-link: #5b21b6;
+
+  --color-primary: #6d28d9;
+  --color-primary-2: #c01a8f;
+  --color-primary-hover: #5b21b6;
+  --color-primary-2-hover: #a3167a;
+  --color-on-primary: #ffffff;
+
+  --color-accent: #ffd23f;
+  --color-on-accent: #2b1a00;
+
+  --color-correct: #0a7a52;
+  --color-correct-bg: #d4f6e6;
+  --color-wrong: #c8183f;
+  --color-wrong-bg: #ffdde6;
+
+  --color-border: #4c2fa8;
+  --color-divider: #d6c9fa;
+  --color-focus: #d6006f;
+
+  --color-header-bg: #5b21b6;
+  --color-on-header: #ffffff;
+  --color-hero-from: #4c1d95;
+  --color-hero-to: #c01a8f;
+  --color-on-hero: #ffffff;
+
+  --color-deck-stage: #000000;
+  --color-on-deck-stage: #ffffff;
+  --color-deck-line: #333333;
+  --color-deck-panel: #111111;
+
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
+  --radius-button: 999px;
+  --radius-pill: 999px;
+  --card-border: 2px solid var(--color-border);
+  --shadow-card: 4px 4px 0 var(--color-border);
+  --shadow-card-hover: 6px 6px 0 var(--color-border);
+  --shadow-button: 0 4px 0 #3b1b86;
+  --header-edge: 0 solid transparent;
+  --header-bg-image: linear-gradient(100deg, #4c1d95 0%, #6d28d9 55%, #c01a8f 100%);
+  --header-hover: rgba(255, 255, 255, 0.2);
+  --mark-bg: var(--color-accent);
+  --mark-fg: var(--color-on-accent);
+  --button-primary-bg: linear-gradient(135deg, var(--color-primary), var(--color-primary-2));
+  --button-primary-bg-hover: linear-gradient(135deg, var(--color-primary-hover), var(--color-primary-2-hover));
+  --hero-bg: linear-gradient(135deg, var(--color-hero-from) 0%, #7c2bd1 55%, var(--color-hero-to) 100%);
+  --page-decor: radial-gradient(circle at 100% 0%, rgba(255, 110, 190, 0.2) 0, transparent 20rem),
+    radial-gradient(circle at 0% 45%, rgba(109, 40, 217, 0.1) 0, transparent 22rem);
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-heading: ui-rounded, "SF Pro Rounded", "Segoe UI Variable Display", "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --heading-weight: 900;
+}
